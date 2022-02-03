@@ -8,18 +8,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.starking.moneyapi.model.Categoria;
-import com.starking.moneyapi.repositories.CategoriaRepository;
+import com.starking.moneyapi.service.CategoriaService;
 
 @RestController
 @RequestMapping("/categorias")
 public class CategoriaResource {
 	
 	@Autowired
-	private CategoriaRepository categoriaRepository;
+	private CategoriaService categoriaService;
 	
 	@GetMapping
-	public List<Categoria> findAll(){
-		return categoriaRepository.findAll();
+	public List<Categoria>  findAll(){
+		 return categoriaService.findAll();
 	}
-
 }
