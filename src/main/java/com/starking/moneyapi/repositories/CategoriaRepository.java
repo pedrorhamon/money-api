@@ -8,4 +8,5 @@ import com.starking.moneyapi.model.Categoria;
 @Repository
 public interface CategoriaRepository  extends JpaRepository<Categoria, Long>{
 
+	Categoria findOne(Long codigo);
 }
