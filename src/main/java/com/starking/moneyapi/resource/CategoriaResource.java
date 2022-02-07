@@ -29,14 +29,16 @@ public class CategoriaResource {
 		 return this.categoriaService.findAll();
 	}
 	
-	@PostMapping("/cadastrar")
+	@PostMapping
 	public ResponseEntity<Categoria> save(@RequestBody Categoria categoria, 
 			HttpServletResponse response) {
 		 Categoria categoriaNew = this.categoriaService.criar(categoria);
 		 URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{codigo}")
 		 .buildAndExpand(categoriaNew.getCodigo()).toUri();
 		 response.setHeader("Location", uri.toASCIIString());	
-		 
+		 if(categoriaNew != null) {
+			 return ResponseEntity.notFound().build();
+		 }
 		 return ResponseEntity.created(uri).body(categoriaNew);
 	}
 	
