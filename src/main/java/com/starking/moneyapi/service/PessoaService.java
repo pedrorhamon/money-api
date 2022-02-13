@@ -10,13 +10,13 @@ import com.starking.moneyapi.repositories.PessoaRepository;
 
 @Service
 public class PessoaService {
-	
+
 	private PessoaRepository pessoaRepository;
-	
-	public List<Pessoa> findAll(){
+
+	public List<Pessoa> findAll() {
 		return this.pessoaRepository.findAll();
 	}
-	
+
 	@Transactional
 	public Pessoa criar(Pessoa pessoa) {
 		return this.pessoaRepository.save(pessoa);
