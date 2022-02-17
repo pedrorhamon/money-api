@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 import com.starking.moneyapi.model.Pessoa;
 
 @Repository
-public interface PessoaRepository extends JpaRepository<Pessoa, String>{
+public interface PessoaRepository extends JpaRepository<Pessoa, Long>{
 	
 	Pessoa findOne(Long codigo);
 

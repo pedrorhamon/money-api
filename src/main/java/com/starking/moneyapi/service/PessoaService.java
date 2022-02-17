@@ -21,4 +21,9 @@ public class PessoaService {
 	public Pessoa criar(Pessoa pessoa) {
 		return this.pessoaRepository.save(pessoa);
 	}
+
+	@Transactional(readOnly = true)
+	public void deletar(Long id) {
+		this.pessoaRepository.deleteById(id);
+	}
 }
