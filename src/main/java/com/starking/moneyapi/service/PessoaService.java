@@ -28,18 +28,29 @@ public class PessoaService {
 	
 	
 	public Pessoa atualizar(Long codigo, Pessoa pessoa) {
-		Pessoa pessoaSalva = this.pessoaRepository.findOne(codigo);
-		if(pessoaSalva == null) {
-			throw new EmptyResultDataAccessException(1);
-		}
+		Pessoa pessoaSalva = atualizarPessoa(codigo);
 		BeanUtils.copyProperties(pessoa, pessoaSalva, "codigo");
 		return this.pessoaRepository.save(pessoaSalva);		
 	}
+
 
 	@Transactional(readOnly = true)
 	public void deletar(Long id) {
 		this.pessoaRepository.deleteById(id);
 	}
+
+	public void atualizarPropriedade(Long codigo, Boolean ativo) {
+		Pessoa pessoaSalva = atualizarPessoa(codigo);
+		pessoaSalva.setAtivo(ativo);
+		pessoaRepository.save(pessoaSalva);
+	}
 	
+	private Pessoa atualizarPessoa(Long codigo) {
+		Pessoa pessoaSalva = this.pessoaRepository.findOne(codigo);
+		if(pessoaSalva == null) {
+			throw new EmptyResultDataAccessException(1);
+		}
+		return pessoaSalva;
+	}
 	
 }
