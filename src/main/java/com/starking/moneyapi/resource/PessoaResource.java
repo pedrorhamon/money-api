@@ -6,6 +6,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,14 +14,16 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.starking.moneyapi.model.Categoria;
 import com.starking.moneyapi.model.Pessoa;
+import com.starking.moneyapi.repositories.PessoaRepository;
 import com.starking.moneyapi.service.PessoaService;
 
 @RestController
@@ -29,6 +32,9 @@ public class PessoaResource {
 	
 	@Autowired
 	private PessoaService pessoaService;
+	
+	@Autowired
+	private PessoaRepository pessoaRepository;
 	
 	@GetMapping
 	public List<Pessoa>  findAll(){
@@ -52,5 +58,13 @@ public class PessoaResource {
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void remover(@PathVariable Long codigo) {
 		this.pessoaService.deletar(codigo);
+	}
+	
+	@PutMapping("/{codigo}")
+	public ResponseEntity<Pessoa> atualizar(@PathVariable Long codigo, 
+			@Valid @RequestBody Pessoa pessoa) {
+		Pessoa pessoaSalva = this.pessoaRepository.findOne(codigo);
+		BeanUtils.copyProperties(pessoa, pessoaSalva, "codigo");
+		return ResponseEntity.ok(pessoaSalva);
 	}
 }
