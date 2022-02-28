@@ -19,7 +19,7 @@ import com.starking.moneyapi.model.Categoria;
 import com.starking.moneyapi.service.CategoriaService;
 
 @RestController
-@RequestMapping("/categorias")
+@RequestMapping("/categoria")
 public class CategoriaResource {
 	
 	@Autowired

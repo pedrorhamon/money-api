@@ -1,0 +1,51 @@
+package com.starking.moneyapi.service;
+
+import java.util.List;
+
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.starking.moneyapi.model.Lancamento;
+import com.starking.moneyapi.repositories.LancamentoRepository;
+
+@Service
+public class LancamentoService {
+
+	@Autowired
+	private LancamentoRepository lancamentoRepository;
+
+	public List<Lancamento> findAll() {
+		return this.lancamentoRepository.findAll();
+	}
+
+	@Transactional
+	public Lancamento criar(Lancamento lancamento) {
+		return this.lancamentoRepository.save(lancamento);
+	}
+
+	public Lancamento buscarPeloCodigo(Long codigo) {
+		return this.lancamentoRepository.findOne(codigo);
+	}
+	
+	public Lancamento atualizar(Long codigo, Lancamento lancamento) {
+		Lancamento lancamentoSalva = atualizarLancamento(codigo);
+		BeanUtils.copyProperties(lancamento, lancamentoSalva, "codigo");
+		return this.lancamentoRepository.save(lancamentoSalva);		
+	}
+	
+	@Transactional(readOnly = true)
+	public void deletar(Long codigo) {
+		this.lancamentoRepository.deleteById(codigo);
+	}
+	
+	private Lancamento atualizarLancamento(Long codigo) {
+		Lancamento lancamentoSalva = this.lancamentoRepository.findOne(codigo);
+		if(lancamentoSalva == null) {
+			throw new EmptyResultDataAccessException(1);
+		}
+		return lancamentoSalva;
+	}
+}

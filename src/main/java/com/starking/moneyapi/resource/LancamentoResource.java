@@ -20,51 +20,46 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.starking.moneyapi.model.Pessoa;
-import com.starking.moneyapi.service.PessoaService;
+import com.starking.moneyapi.model.Lancamento;
+import com.starking.moneyapi.service.LancamentoService;
 
 @RestController
-@RequestMapping("/pessoa")
-public class PessoaResource {
+@RequestMapping("/lancamento")
+public class LancamentoResource {
 	
 	@Autowired
-	private PessoaService pessoaService;
+	private LancamentoService lancamentoService;
 	
 	@GetMapping
-	public List<Pessoa>  findAll(){
-		 return this.pessoaService.findAll();
+	public List<Lancamento>  findAll(){
+		 return this.lancamentoService.findAll();
 	}
 	
+	@SuppressWarnings("unused")
 	@PostMapping
-	public ResponseEntity<Pessoa> save(@Valid @RequestBody Pessoa pessoa, 
+	public ResponseEntity<Lancamento> save(@Valid @RequestBody Lancamento lancamento, 
 			HttpServletResponse response) {
-		 Pessoa pessoaNew = this.pessoaService.criar(pessoa);
+		 Lancamento lancamentoNew = this.lancamentoService.criar(lancamento);
 		 URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{codigo}")
-		 .buildAndExpand(pessoaNew.getCategoria().getCodigo()).toUri();
+		 .buildAndExpand(lancamentoNew.getCategoria().getCodigo()).toUri();
 		 response.setHeader("Location", uri.toASCIIString());	
-		 if(pessoaNew != null) {
+		 if(lancamentoNew != null) {
 			 return ResponseEntity.notFound().build();
 		 }
-		 return ResponseEntity.created(uri).body(pessoaNew);
+		 return ResponseEntity.created(uri).body(lancamentoNew);
 	}
 	
 	@DeleteMapping("/{codigo}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void remover(@PathVariable Long codigo) {
-		this.pessoaService.deletar(codigo);
+		this.lancamentoService.deletar(codigo);
 	}
 	
 	@PutMapping("/{codigo}")
-	public ResponseEntity<Pessoa> atualizar(@PathVariable Long codigo, 
-			@Valid @RequestBody Pessoa pessoa) {
-		Pessoa pessoaSalva = this.pessoaService.atualizar(codigo, pessoa);
-		return ResponseEntity.ok(pessoaSalva);
+	public ResponseEntity<Lancamento> atualizar(@PathVariable Long codigo, 
+			@Valid @RequestBody Lancamento lancamento) {
+		Lancamento lancamentoSalva = this.lancamentoService.atualizar(codigo, lancamento);
+		return ResponseEntity.ok(lancamentoSalva);
 		
-	}
-	
-	@PutMapping("/{codigo}/ativo")
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void atualizarPropriedadeAtivo(@PathVariable Long codigo, @RequestBody Boolean ativo) {
-		this.pessoaService.atualizarPropriedade(codigo, ativo);
 	}
 }
