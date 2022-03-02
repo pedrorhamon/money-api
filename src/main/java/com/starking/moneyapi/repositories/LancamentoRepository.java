@@ -7,5 +7,4 @@ import com.starking.moneyapi.model.Lancamento;
 public interface LancamentoRepository extends  JpaRepository<Lancamento, Long>{
 	
 	Lancamento findOne(Long codigo);
-
 }

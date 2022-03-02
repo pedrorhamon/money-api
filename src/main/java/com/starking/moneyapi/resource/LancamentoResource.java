@@ -1,5 +1,6 @@
 package com.starking.moneyapi.resource;
 
+import java.awt.print.Pageable;
 import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
@@ -27,6 +28,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.starking.moneyapi.exception.PessoaInexistenteOuInativoException;
 import com.starking.moneyapi.exceptionhandle.ExceptionHandler.Erro;
 import com.starking.moneyapi.model.Lancamento;
+import com.starking.moneyapi.repositories.filter.LancamentoFilter;
 import com.starking.moneyapi.service.LancamentoService;
 
 @RestController
@@ -40,7 +42,7 @@ public class LancamentoResource {
 	private MessageSource messageSource;
 	
 	@GetMapping
-	public List<Lancamento>  findAll(){
+	public List<Lancamento>  pesquisar(LancamentoFilter lancamentoFilter, Pageable page){
 		 return this.lancamentoService.findAll();
 	}
 	
