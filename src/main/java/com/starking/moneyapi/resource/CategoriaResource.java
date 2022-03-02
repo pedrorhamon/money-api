@@ -30,6 +30,7 @@ public class CategoriaResource {
 		 return this.categoriaService.findAll();
 	}
 	
+	@SuppressWarnings("unused")
 	@PostMapping
 	public ResponseEntity<Categoria> save(@Valid @RequestBody Categoria categoria, 
 			HttpServletResponse response) {
