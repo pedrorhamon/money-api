@@ -1,15 +1,19 @@
 package com.starking.moneyapi.resource;
 
 import java.net.URI;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,6 +24,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.starking.moneyapi.exception.PessoaInexistenteOuInativoException;
+import com.starking.moneyapi.exceptionhandle.ExceptionHandler.Erro;
 import com.starking.moneyapi.model.Lancamento;
 import com.starking.moneyapi.service.LancamentoService;
 
@@ -29,6 +35,9 @@ public class LancamentoResource {
 	
 	@Autowired
 	private LancamentoService lancamentoService;
+	
+	@Autowired
+	private MessageSource messageSource;
 	
 	@GetMapping
 	public List<Lancamento>  findAll(){
@@ -62,4 +71,12 @@ public class LancamentoResource {
 		return ResponseEntity.ok(lancamentoSalva);
 		
 	}
+	
+	@ExceptionHandler({PessoaInexistenteOuInativoException.class})
+	public ResponseEntity<?> handlePessoaInexistenteOuInativaException(PessoaInexistenteOuInativoException e) {
+		String mensagemUsuario = messageSource.getMessage("mensagem.invalida", null, LocaleContextHolder.getLocale()); 
+		String mensagemDesenvolvedor = e.getCause() != null ? e.getCause().toString() : e.toString();	
+		List<Erro> erros = Arrays.asList(new Erro(mensagemUsuario, mensagemDesenvolvedor));
+		return ResponseEntity.badRequest().body(erros);
+		}
 }

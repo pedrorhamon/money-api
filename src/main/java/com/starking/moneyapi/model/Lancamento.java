@@ -13,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 import com.starking.moneyapi.model.enums.TipoLancamentoEnum;
 
@@ -38,25 +39,30 @@ public class Lancamento {
 	@Column(name = "descricao")
 	private String descricao;
 	
+	@NotNull
 	@Column(name = "dataLancamento")
 	private LocalDate dataLancamento;
 	
 	@Column(name = "dataPagamento")
 	private LocalDate dataPagamento;
 	
+	@NotNull
 	@Column(name = "valor")
 	private BigDecimal valor;
 	
 	@Column(name = "observacao")
 	private String observacao;
 	
+	@NotNull
 	@Enumerated(EnumType.STRING)
 	private TipoLancamentoEnum tipoLancamentoEnum;
 	
+	@NotNull
 	@ManyToOne
 	@JoinColumn(name = "codigo_categoria")
 	private Categoria categoria;
 	
+	@NotNull
 	@ManyToOne
 	@JoinColumn(name = "codigo_pessoa")
 	private Pessoa pessoa;

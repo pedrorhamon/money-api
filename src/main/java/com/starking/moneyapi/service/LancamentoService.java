@@ -8,14 +8,20 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.starking.moneyapi.exception.PessoaInexistenteOuInativoException;
 import com.starking.moneyapi.model.Lancamento;
+import com.starking.moneyapi.model.Pessoa;
 import com.starking.moneyapi.repositories.LancamentoRepository;
+import com.starking.moneyapi.repositories.PessoaRepository;
 
 @Service
 public class LancamentoService {
 
 	@Autowired
 	private LancamentoRepository lancamentoRepository;
+	
+	@Autowired
+	private PessoaRepository pessoaRepository;
 
 	public List<Lancamento> findAll() {
 		return this.lancamentoRepository.findAll();
@@ -23,6 +29,10 @@ public class LancamentoService {
 
 	@Transactional
 	public Lancamento criar(Lancamento lancamento) {
+		Pessoa pessoa = this.pessoaRepository.findOne(lancamento.getPessoa().getCodigo());
+		if(pessoa == null || pessoa.isInativo()) {
+			throw new PessoaInexistenteOuInativoException();
+		}
 		return this.lancamentoRepository.save(lancamento);
 	}
 
