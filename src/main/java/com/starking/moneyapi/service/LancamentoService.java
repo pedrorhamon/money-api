@@ -1,10 +1,9 @@
 package com.starking.moneyapi.service;
 
-import java.util.List;
-
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,8 +22,9 @@ public class LancamentoService {
 	@Autowired
 	private PessoaRepository pessoaRepository;
 
-	public List<Lancamento> findAll() {
-		return this.lancamentoRepository.findAll();
+	@SuppressWarnings("unchecked")
+	public Page<Lancamento> findAll() {
+		return (Page<Lancamento>) this.lancamentoRepository.findAll();
 	}
 
 	@Transactional
