@@ -1,11 +1,27 @@
 package com.starking.moneyapi.config;
 
-import com.nimbusds.oauth2.sdk.as.AuthorizationServerConfigurationRequest;
-import com.nimbusds.oauth2.sdk.id.Issuer;
+import java.util.Locale;
 
-public class AuthorizationServerConfig extends AuthorizationServerConfigurationRequest {
+import org.springframework.context.MessageSource;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
+
+public class AuthorizationServerConfig {
 	
-	public AuthorizationServerConfig(Issuer issuer) {
-		super(issuer);
+	@Bean
+	public MessageSource message() {
+		ReloadableResourceBundleMessageSource message = new ReloadableResourceBundleMessageSource();
+		message.setBasename("classpath:messages");
+		message.setDefaultEncoding("ISO-8859-1");
+		message.setDefaultLocale(Locale.getDefault());
+		return message;
+	}
+	
+	@Bean
+	public LocalValidatorFactoryBean validation(){
+		LocalValidatorFactoryBean bean = new LocalValidatorFactoryBean();
+		bean.setValidationMessageSource(message());
+		return bean;
 	}
 }

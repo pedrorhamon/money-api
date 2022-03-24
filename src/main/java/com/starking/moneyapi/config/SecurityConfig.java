@@ -1,31 +1,30 @@
 package com.starking.moneyapi.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.oauth2.resource.servlet.OAuth2ResourceServerAutoConfiguration;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @EnableWebSecurity
 @Configuration
-public class SecurityConfig extends OAuth2ResourceServerAutoConfiguration{
+public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	
-	@Autowired
-	public void configure(AuthenticationManagerBuilder auth) throws Exception {
-		auth.inMemoryAuthentication()
-		.withUser("admin")
-		.password("admin").roles("Role");
+	@Bean
+	public PasswordEncoder password() {
+		return new BCryptPasswordEncoder();
 	}
 	
-	public void configure(HttpSecurity http) throws Exception {
-		http.authorizeRequests()
-		.antMatchers("/categorias")
-		.permitAll()
-		.anyRequest().authenticated()
-		.and()
-		.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-		.csrf().disable();
+	@Override
+	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+		super.configure(auth);
+	}
+	
+	@Override
+	protected void configure(HttpSecurity http) throws Exception {	
+		super.configure(http);
 	}
 }
