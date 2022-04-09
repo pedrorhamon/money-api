@@ -14,11 +14,13 @@ import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
+import com.starking.moneyapi.utils.ConstanteUtils;
+
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class CorsFilter implements Filter{
 	
-	private String originPermitida = "http://localhost:8000";
+	private String originPermitida = ConstanteUtils.LOCALHOST;
 
 	@Override
 	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
